@@ -3,3 +3,6 @@
 - Make sure all migrations are applied by running `npm run hasura:apply`
 - Start handler server by running `npm run hasura:actions-server:start`
 - To do development, start hasura console with `npm run hasura:console`
+
+## Running bot
+- `npm run bot:start`
