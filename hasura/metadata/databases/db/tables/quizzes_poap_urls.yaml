@@ -1,0 +1,7 @@
+table:
+  name: poap_urls
+  schema: quizzes
+object_relationships:
+- name: quiz
+  using:
+    foreign_key_constraint_on: quiz_id

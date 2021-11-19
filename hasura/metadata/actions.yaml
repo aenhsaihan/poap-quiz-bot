@@ -1,0 +1,13 @@
+actions:
+- name: GetPoapClaimUrl
+  definition:
+    kind: synchronous
+    handler: http://host.docker.internal:3000/GetPoapClaimUrl
+custom_types:
+  enums: []
+  input_objects:
+  - name: SampleInput
+  objects:
+  - name: SampleOutput
+  - name: PoapClaimUrlResult
+  scalars: []
