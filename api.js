@@ -40,7 +40,45 @@ const getPoapTokenUrlForQuiz = async (quizId) => {
     .then((res) => res.GetPoapClaimUrl.poapClaimUrl);
 };
 
+// This is an example input object for creating a quiz
+const createQuizExampleInput = {
+  name: "testname",
+  description: "test description",
+  questions: {
+    data: [
+      {
+        text: "test question",
+        answers: {
+          data: [
+            {
+              text: "answer a",
+              is_correct: true,
+            },
+            {
+              text: "answer b",
+              is_correct: false,
+            },
+          ],
+        },
+      },
+    ],
+  },
+};
+
+const createQuiz = async (quiz = createQuizExampleInput) => {
+  const query = gql`
+    mutation ($quiz: quizzes_insert_input!) {
+      insert_quizzes_one(object: $quiz) {
+        id
+      }
+    }
+  `;
+
+  return client.request(query, { quiz }).then((res) => res.insert_quizzes_one);
+};
+
 module.exports = {
   getQuizById,
   getPoapTokenUrlForQuiz,
+  createQuiz,
 };

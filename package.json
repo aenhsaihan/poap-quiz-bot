@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "bot:start": "nodemon ./hasura/hasura-actions-server.js",
     "hasura": "hasura --project hasura --skip-update-check",
     "hasura:console": "npm run hasura console",
     "hasura:apply": "npm run hasura migrate apply",
