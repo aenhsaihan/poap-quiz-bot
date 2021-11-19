@@ -1,4 +1,4 @@
-- "!include quizzes_answers.yaml"
-- "!include quizzes_poap_urls.yaml"
-- "!include quizzes_questions.yaml"
-- "!include quizzes_quizzes.yaml"
+- "!include public_answers.yaml"
+- "!include public_poap_urls.yaml"
+- "!include public_questions.yaml"
+- "!include public_quizzes.yaml"
