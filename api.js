@@ -63,6 +63,16 @@ const createQuizExampleInput = {
       },
     ],
   },
+  poap_urls: {
+    data: [
+      {
+        url: "https://claim_url.com/1",
+      },
+      {
+        url: "https://claim_url.com/2",
+      },
+    ],
+  },
 };
 
 const createQuiz = async (quiz = createQuizExampleInput) => {
@@ -74,7 +84,9 @@ const createQuiz = async (quiz = createQuizExampleInput) => {
     }
   `;
 
-  return client.request(query, { quiz }).then((res) => res.insert_quizzes_one);
+  return client
+    .request(query, { quiz })
+    .then((res) => res.insert_quizzes_one.id);
 };
 
 module.exports = {
