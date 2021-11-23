@@ -70,10 +70,30 @@ client.on("message", async (message) => {
 
   const rows = [row, row2];
 
+  let counter = 0;
+
+  const collector = message.createMessageComponentCollector({
+    componentType: "SELECT_MENU",
+    time: 15000,
+  });
+
+  collector.on("collect", async (i) => {
+    if (counter < rows.length) {
+      await message.channel.send({
+        content: "Pong!",
+        components: [rows[counter++]],
+      });
+    }
+  });
+
+  collector.on("end", (collected) => {
+    console.log(`Collected ${collected.size} interactions.`);
+  });
+
   if (message.content === "!hello") {
     await message.channel.send({
       content: "Pong!",
-      components: [rows.shift()],
+      components: [rows[counter++]],
     });
   }
 });
