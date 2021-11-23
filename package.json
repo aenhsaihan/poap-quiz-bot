@@ -8,7 +8,12 @@
     "hasura": "hasura --project hasura --skip-update-check",
     "hasura:console": "npm run hasura console",
     "hasura:apply": "npm run hasura migrate apply",
-    "hasura:actions-server:start": "nodemon ./hasura/hasura-actions-server.js"
+    "hasura:metadata:export": "npm run hasura metadata export",
+    "hasura:metadata:apply": "npm run hasura metadata apply",
+    "hasura:actions-server:start": "nodemon ./hasura/hasura-actions-server.js",
+    "hasura:staging:deploy": "npm run hasura:metadata:export && npm run hasura:staging:metadata:apply && npm run hasura:staging:migrations:apply",
+    "hasura:staging:migrations:apply": "hasura --project hasura --skip-update-check --envfile staging.env migrate apply",
+    "hasura:staging:metadata:apply": "hasura --project hasura --skip-update-check --envfile staging.env metadata apply"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +26,7 @@
     "node-fetch": "^3.1.0"
   },
   "devDependencies": {
+    "dotenv-cli": "^4.1.0",
     "hasura-cli": "^2.1.0-beta.1",
     "nodemon": "^2.0.15",
     "pm2": "^5.1.2",
