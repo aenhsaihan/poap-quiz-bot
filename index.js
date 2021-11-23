@@ -1,4 +1,9 @@
-const { Client, Intents } = require("discord.js");
+const {
+  Client,
+  Intents,
+  MessageActionRow,
+  MessageSelectMenu,
+} = require("discord.js");
 
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -15,41 +20,60 @@ client.on("ready", () => {
   // });
 });
 
-client.on("message", async (message) => {
-  const questions = [
-    "What is your name?",
-    "How old are you?",
-    "What country are you from?",
-  ];
-  let counter = 0;
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isSelectMenu()) return;
 
-  const filter = (m) => m.author.id === message.author.id;
+  if (interaction.customId === "select") {
+    await interaction.update({
+      content: "Something was selected!",
+      components: [],
+    });
+  }
+});
+
+client.on("message", async (message) => {
+  const row = new MessageActionRow().addComponents(
+    new MessageSelectMenu()
+      .setCustomId("select")
+      .setPlaceholder("Nothing selected")
+      .addOptions([
+        {
+          label: "Select me",
+          description: "This is a description",
+          value: "first_option",
+        },
+        {
+          label: "You can select me too",
+          description: "This is also a description",
+          value: "second_option",
+        },
+      ])
+  );
+
+  const row2 = new MessageActionRow().addComponents(
+    new MessageSelectMenu()
+      .setCustomId("select")
+      .setPlaceholder("Nothing selected")
+      .addOptions([
+        {
+          label: "Select me",
+          description: "This is a description",
+          value: "first_option",
+        },
+        {
+          label: "You can select me too",
+          description: "This is also a description",
+          value: "second_option",
+        },
+      ])
+  );
+
+  const rows = [row, row2];
 
   if (message.content === "!hello") {
-    message.channel.send(questions[counter++]);
-    const collector = message.channel.createMessageCollector({
-      filter,
-      time: 1000 * 15, // 15s
-      max: questions.length,
-    });
-
-    collector.on("collect", (msg) => {
-      if (counter < questions.length) {
-        msg.channel.send(questions[counter++]);
-      }
-    });
-
-    collector.on("end", (collected) => {
-      console.log(`Collected ${collected.size} messages`);
-
-      if (collected.size < questions.length) {
-        message.reply("You did not answer the questions in time.");
-      }
-
-      let counter = 0;
-      collected.forEach((value) => {
-        console.log(questions[counter++], value.content);
-      });
+    await message.channel.send({
+      content: "Pong!",
+      components: [rows.shift()],
     });
   }
 });
