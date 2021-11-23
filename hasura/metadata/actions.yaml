@@ -2,7 +2,7 @@ actions:
 - name: GetPoapClaimUrl
   definition:
     kind: synchronous
-    handler: http://host.docker.internal:3000/GetPoapClaimUrl
+    handler: '{{ACTION_BASE_URL}}/GetPoapClaimUrl'
 custom_types:
   enums: []
   input_objects:
