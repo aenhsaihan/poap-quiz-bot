@@ -11,7 +11,7 @@
     "hasura:metadata:export": "npm run hasura metadata export",
     "hasura:metadata:apply": "npm run hasura metadata apply",
     "hasura:actions-server:start": "nodemon ./hasura/hasura-actions-server.js",
-    "start": "nodemon ./hasura/hasura-actions-server.js",
+    "start": "node ./hasura/hasura-actions-server.js",
     "hasura:staging:deploy": "npm run hasura:metadata:export && npm run hasura:staging:metadata:apply && npm run hasura:staging:migrations:apply",
     "hasura:staging:migrations:apply": "hasura --project hasura --skip-update-check --envfile staging.env migrate apply",
     "hasura:staging:metadata:apply": "hasura --project hasura --skip-update-check --envfile staging.env metadata apply"
