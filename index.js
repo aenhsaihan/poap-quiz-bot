@@ -25,7 +25,7 @@ client.on("interactionCreate", async (interaction) => {
 
   if (interaction.customId === "select") {
     await interaction.update({
-      content: "Something was selected!",
+      content: `You chose ${interaction.values[0]}`,
       components: [],
     });
   }
@@ -93,7 +93,9 @@ client.on("message", async (message) => {
     });
 
     collector.on("end", (collected) => {
-      console.log(`Collected ${collected.size} interactions.`);
+      message.channel.send({
+        content: `You have answered ${collected.size} questions`,
+      });
     });
 
     const count = counter++;
