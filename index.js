@@ -32,19 +32,24 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 client.on("message", async (message) => {
+  const questions = [
+    "Who invented Ethereum?",
+    "What programming language is used for ETH smart contracts?",
+  ];
+
   const row = new MessageActionRow().addComponents(
     new MessageSelectMenu()
       .setCustomId("select")
       .setPlaceholder("Nothing selected")
       .addOptions([
         {
-          label: "Select me",
-          description: "This is a description",
+          label: "A",
+          description: "Satoshi Nakamoto",
           value: "first_option",
         },
         {
-          label: "You can select me too",
-          description: "This is also a description",
+          label: "B",
+          description: "Vitalik Buterin",
           value: "second_option",
         },
       ])
@@ -56,13 +61,13 @@ client.on("message", async (message) => {
       .setPlaceholder("Nothing selected")
       .addOptions([
         {
-          label: "another quiz question",
-          description: "This is a description",
+          label: "A",
+          description: "Solidity",
           value: "first_option",
         },
         {
-          label: "nother quiz question",
-          description: "This is also a description",
+          label: "B",
+          description: "JavaScript",
           value: "second_option",
         },
       ])
@@ -79,9 +84,10 @@ client.on("message", async (message) => {
 
     collector.on("collect", (i) => {
       if (counter < rows.length) {
+        const count = counter++;
         message.channel.send({
-          content: "Pong!!!",
-          components: [rows[counter++]],
+          content: questions[count],
+          components: [rows[count]],
         });
       }
     });
@@ -90,9 +96,10 @@ client.on("message", async (message) => {
       console.log(`Collected ${collected.size} interactions.`);
     });
 
+    const count = counter++;
     message.channel.send({
-      content: "Pong!",
-      components: [rows[counter++]],
+      content: questions[count],
+      components: [rows[count]],
     });
   }
 });
