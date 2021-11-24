@@ -56,12 +56,12 @@ client.on("message", async (message) => {
       .setPlaceholder("Nothing selected")
       .addOptions([
         {
-          label: "Select me",
+          label: "another quiz question",
           description: "This is a description",
           value: "first_option",
         },
         {
-          label: "You can select me too",
+          label: "nother quiz question",
           description: "This is also a description",
           value: "second_option",
         },
@@ -72,26 +72,25 @@ client.on("message", async (message) => {
 
   let counter = 0;
 
-  const collector = message.createMessageComponentCollector({
-    componentType: "SELECT_MENU",
-    time: 15000,
-  });
-
-  collector.on("collect", async (i) => {
-    if (counter < rows.length) {
-      await message.channel.send({
-        content: "Pong!",
-        components: [rows[counter++]],
-      });
-    }
-  });
-
-  collector.on("end", (collected) => {
-    console.log(`Collected ${collected.size} interactions.`);
-  });
-
   if (message.content === "!hello") {
-    await message.channel.send({
+    const collector = message.channel.createMessageComponentCollector({
+      max: rows.length,
+    });
+
+    collector.on("collect", (i) => {
+      if (counter < rows.length) {
+        message.channel.send({
+          content: "Pong!!!",
+          components: [rows[counter++]],
+        });
+      }
+    });
+
+    collector.on("end", (collected) => {
+      console.log(`Collected ${collected.size} interactions.`);
+    });
+
+    message.channel.send({
       content: "Pong!",
       components: [rows[counter++]],
     });
