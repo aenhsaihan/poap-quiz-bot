@@ -1,5 +1,5 @@
-const { Client, Collection, Intents } = require('discord.js');
-const fs = require('fs');
+const { Client, Collection, Intents } = require("discord.js");
+const fs = require("fs");
 const { prefix, token } = require("./config.json");
 
 const api = require("./api");
@@ -9,37 +9,45 @@ const client = new Client({
 });
 
 client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+const commandFiles = fs
+  .readdirSync("./commands")
+  .filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+  const command = require(`./commands/${file}`);
+  client.commands.set(command.name, command);
 }
 
 client.once("ready", () => {
   console.log("The client is ready!");
 });
 
-client.on("message", msg => {
-  if(!msg.content.startsWith(prefix) || msg.author.bot) return;
+client.on("message", (msg) => {
+  if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
-  const args = msg.content.slice(prefix.length).trim().split(' ');
-	const command = args.shift().toLowerCase();
+  const args = msg.content.slice(prefix.length).trim().split(" ");
+  const command = args.shift().toLowerCase();
 
-  if(command === 'ping') {
-    client.commands.get('ping').execute(msg);
+  if (command === "ping") {
+    client.commands.get("ping").execute(msg);
   }
 
-  if(command === 'createquiz') {
+  if (command === "createquiz") {
+    client.commands.get("createquiz").execute(msg)
+  }
+
+  if (command === "takequiz") {
     if (!args.length) {
-			return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`);
+      return msg.channel.send(
+        `You didn't provide any arguments, ${msg.author}!`
+      );
     }
-    
-    client.commands.get('createquiz').execute(msg, args);
-  }
 
+    client.commands.get("takequiz").execute(msg, args);
+  }
 });
 
 client.login(token);
 
-api.createQuiz().then((res) => console.log(res));
+// api.createQuiz().then((res) => console.log(res));
