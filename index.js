@@ -7,6 +7,10 @@ const {
 } = require("discord.js");
 const fs = require("fs");
 const { prefix, token } = require("./config.json");
+let db = require("./db")
+/* Temporary Database */
+db = db.quizzes[0]
+/* Temporary Database */
 
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -48,66 +52,42 @@ client.on("message", async (message) => {
   }
 
   if (command === "createquiz") {
-    if (!args.length) {
-      return message.channel.send(
-        `You didn't provide any arguments, ${message.author}!`
-      );
-    }
-
     client.commands.get("createquiz").execute(message, args);
   }
 
-  const questions = [
-    "Who invented Ethereum?",
-    "What programming language is used for ETH smart contracts?",
-  ];
+  if (message.content === "!takequiz") {
+    let questions = [];
+    let rows = [];
+    let counter = 0;
+    let labels = ["A", "B", "C", "D"];
 
-  const row = new MessageActionRow().addComponents(
-    new MessageSelectMenu()
-      .setCustomId("select")
-      .setPlaceholder("Nothing selected")
-      .addOptions([
-        {
-          label: "A",
-          description: "Satoshi Nakamoto",
-          value: "first_option",
-        },
-        {
-          label: "B",
-          description: "Vitalik Buterin",
-          value: "second_option",
-        },
-      ])
-  );
+    for(let i = 0; i < db.questions.data.length; i++) {
+      questions.push(db.questions.data[i].text);
+      let tempArr = [];
 
-  const row2 = new MessageActionRow().addComponents(
-    new MessageSelectMenu()
-      .setCustomId("select")
-      .setPlaceholder("Nothing selected")
-      .addOptions([
-        {
-          label: "A",
-          description: "Solidity",
-          value: "first_option",
-        },
-        {
-          label: "B",
-          description: "JavaScript",
-          value: "second_option",
-        },
-      ])
-  );
+      for(let j = 0; j < db.questions.data[i].answers.data.length; j++) {
+        let tempObj = {
+          label: labels[j],
+        };
+          tempObj.description = db.questions.data[i].answers.data[j].text;
+          tempObj.value = `Option ${j + 1}`;
+          tempArr.push(tempObj);
+      }
+      rows.push(
+        new MessageActionRow().addComponents(
+          new MessageSelectMenu()
+            .setCustomId("select")
+            .setPlaceholder("Nothing selected")
+            .addOptions(tempArr)
+        )
+      );
+    }
 
-  const rows = [row, row2];
-
-  let counter = 0;
-
-  if (message.content === "!hello") {
     const collector = message.channel.createMessageComponentCollector({
       max: rows.length,
     });
 
-    collector.on("collect", (i) => {
+    collector.on("collect", () => {
       if (counter < rows.length) {
         const count = counter++;
         message.channel.send({
