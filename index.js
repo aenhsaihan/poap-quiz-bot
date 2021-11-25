@@ -26,27 +26,6 @@ client.once("ready", () => {
   console.log("The client is ready!");
 });
 
-client.on("message", (msg) => {
-  if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-
-  const args = msg.content.slice(prefix.length).trim().split(" ");
-  const command = args.shift().toLowerCase();
-
-  if (command === "ping") {
-    client.commands.get("ping").execute(msg);
-  }
-
-  if (command === "createquiz") {
-    if (!args.length) {
-      return msg.channel.send(
-        `You didn't provide any arguments, ${msg.author}!`
-      );
-    }
-
-    client.commands.get("createquiz").execute(msg, args);
-  }
-});
-
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isSelectMenu()) return;
 
@@ -59,6 +38,25 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 client.on("message", async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(" ");
+  const command = args.shift().toLowerCase();
+
+  if (command === "ping") {
+    client.commands.get("ping").execute(message);
+  }
+
+  if (command === "createquiz") {
+    if (!args.length) {
+      return message.channel.send(
+        `You didn't provide any arguments, ${message.author}!`
+      );
+    }
+
+    client.commands.get("createquiz").execute(message, args);
+  }
+
   const questions = [
     "Who invented Ethereum?",
     "What programming language is used for ETH smart contracts?",
