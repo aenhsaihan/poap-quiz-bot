@@ -3,12 +3,19 @@ const bodyParser = require("body-parser");
 const fetch = import("node-fetch");
 
 const { GraphQLClient, gql } = require("graphql-request");
-const client = new GraphQLClient("http://localhost:8080/v1/graphql");
 
 const app = express();
 
+const HASURA_ENDPOINT =
+  process.env.HASURA_GRAPHQL_ENDPOINT || "http://localhost:8080/v1/graphql";
+const HASURA_ADMIN_SECRET = process.env.HASURA_GRAPHQL_ADMIN_SECRET;
 const PORT = process.env.PORT || 3000;
 
+const client = new GraphQLClient(HASURA_ENDPOINT);
+
+if (HASURA_ADMIN_SECRET) {
+  client.setHeader("x-hasura-admin-secret", HASURA_ADMIN_SECRET);
+}
 app.use(bodyParser.json());
 
 // Request Handler
