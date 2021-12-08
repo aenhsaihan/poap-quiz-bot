@@ -40,6 +40,8 @@ client.on("interactionCreate", async (interaction) => {
 client.on("message", async (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
+  console.log(message);
+
   const args = message.content.slice(prefix.length).trim().split(" ");
   const command = args.shift().toLowerCase();
 

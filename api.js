@@ -43,6 +43,7 @@ const getPoapTokenUrlForQuiz = async (quizId) => {
 // This is an example input object for creating a quiz
 const createQuizExampleInput = {
   name: "testname",
+  guildId: "910360946935996436",
   description: "test description",
   questions: {
     data: [
@@ -75,7 +76,7 @@ const createQuizExampleInput = {
   },
 };
 
-const createQuiz = async (quiz = createQuizExampleInput) => {
+const createQuiz = async (guildId, quiz = createQuizExampleInput) => {
   const query = gql`
     mutation ($quiz: quizzes_insert_input!) {
       insert_quizzes_one(object: $quiz) {
@@ -87,6 +88,20 @@ const createQuiz = async (quiz = createQuizExampleInput) => {
   return client
     .request(query, { quiz })
     .then((res) => res.insert_quizzes_one.id);
+};
+
+export const listQuizzesForGuild = (guildId) => {
+  const query = gql`
+    query QuizzesByGuildId($guildId: String!) {
+      quizzes(where: { guild_id: { _eq: $guildId } }) {
+        id
+        name
+        description
+      }
+    }
+  `;
+
+  return client.request(query, { guildId }).then((res) => res.quizzes);
 };
 
 module.exports = {
