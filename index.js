@@ -30,22 +30,12 @@ client.once("ready", () => {
   console.log("The client is ready!");
 });
 
-client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isSelectMenu()) return;
-
-  if (interaction.customId === "select") {
-    await interaction.update({
-      content: `You chose ${interaction.values[0]}`,
-      components: [],
-    });
-  }
-});
-
 client.on("message", async (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).trim().split(" ");
   const command = args.shift().toLowerCase();
+  const filter = (message) => !message.author.bot;
 
   if (command === "ping") {
     client.commands.get("ping").execute(message);
@@ -60,6 +50,9 @@ client.on("message", async (message) => {
     let rows = [];
     let counter = 0;
     let labels = ["A", "B", "C", "D"];
+
+    let index = 0;
+    let correct = 0;
 
     for(let i = 0; i < db.questions.data.length; i++) {
       questions.push(db.questions.data[i].text);
@@ -87,20 +80,63 @@ client.on("message", async (message) => {
       max: rows.length,
     });
 
-    collector.on("collect", () => {
+    client.on("interactionCreate", async (interaction) => {
+      //if (!interaction.isSelectMenu()) return;
+    
+      if (interaction.customId === "select") {
+        let answer = interaction.values[0];
+        answer = answer.substring(7);
+        console.log(db.questions.data[index].answers.data[answer - 1].text)
+        console.log(db.questions.data[index].correctAnswer.text)
+        if(db.questions.data[index].answers.data[answer - 1].text == db.questions.data[index].correctAnswer.text){
+          correct++
+        }
+        await interaction.update({
+          content: `You chose ${interaction.values[0]}`,
+          components: [],
+        });
+      }
+
       if (counter < rows.length) {
         const count = counter++;
         message.channel.send({
           content: questions[count],
           components: [rows[count]],
-        });
+        })
+        index++;
       }
     });
+    // collector.on("collect", () => {
+    //   if (counter < rows.length) {
+    //     const count = counter++;
+    //     message.channel.send({
+    //       content: questions[count],
+    //       components: [rows[count]],
+    //     })
+    //     .then(async(collected) => {
+    //       collected = await message.update({
+    //         filter,
+    //         max: 1,
+    //         time: 30000,
+    //         errors: ["time"],
+    //       });
+    //       console.log(collected)
+    //     })
+    //   }
+    // });
 
     collector.on("end", (collected) => {
-      message.channel.send({
-        content: `You have answered ${collected.size} questions`,
-      });
+      console.log(index)
+      console.log(correct)
+      if(index + 1 === correct){
+        db.links.count++;
+        message.channel.send({
+          content: `Perfect! Here is the link for your POAP: ${db.links.data[db.links.count]}`,
+        });
+      }
+      else {
+        message.channel.send(`Your score was ${correct} / ${db.questions.data.length}. Please try again.`);
+      }
     });
 
     const count = counter++;

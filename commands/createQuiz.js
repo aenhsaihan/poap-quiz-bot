@@ -67,6 +67,8 @@ module.exports = {
                 data: links,
                 count: 0,
               };
+              /**DELETE THIS */
+              console.log(JSON.stringify(quiz))
               msg.channel.send(
                 `${quiz.links.data.length} POAP claim links added!`
               );
@@ -251,6 +253,7 @@ module.exports = {
                 }
               }
               db.quizzes.push(quiz);
+              console.log(JSON.stringify(quiz));
               msg.channel.send("Quiz added to database!");
               addLinks();
             }
