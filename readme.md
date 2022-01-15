@@ -6,3 +6,9 @@
 
 ## Running bot
 - `npm run bot:start`
+
+## Ideas
+- Command handler
+- Setup atlas cloud server
+- Utilize discord.js for database handling
+- 

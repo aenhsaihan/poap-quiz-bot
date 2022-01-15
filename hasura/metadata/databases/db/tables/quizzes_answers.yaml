@@ -1,7 +1,0 @@
-table:
-  name: answers
-  schema: quizzes
-object_relationships:
-- name: question
-  using:
-    foreign_key_constraint_on: question_id
