@@ -36,8 +36,20 @@ const init = () => {
   client.login(token);
 };
 
+//event handling 
 client.once("ready", () => {
   console.log("The client is ready!");
+});
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isSelectMenu()) return;
+
+  if (interaction.customId === "select") {
+    await interaction.update({
+      content: `Answer collected`,
+      components: [],
+    });
+  }
 });
 
 // command handling
@@ -55,7 +67,8 @@ client.on("message", async (message) => {
     client.commands.get("createquiz").execute(message, args);
   }
 
-  if (message.content === "!takequiz") {
+  if (command === "takequiz") {
+    client.commands.get("takequiz").execute(client, message);
   }
 
   // test commands

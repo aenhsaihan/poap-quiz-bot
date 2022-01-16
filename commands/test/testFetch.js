@@ -1,4 +1,4 @@
-const { fetchQuiz } = require("../database/mongoose");
+const { fetchQuiz } = require("../../database/mongoose");
 
 module.exports = {
   name: "testfetch",

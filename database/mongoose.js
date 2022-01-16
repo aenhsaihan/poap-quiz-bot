@@ -2,7 +2,7 @@ const Quiz = require("./schema/quiz");
 
 // to fetch quiz
 const fetchQuiz = async function (data) {
-  return await Quiz.findOne({ title: data });
+  return await Quiz.findOne({ name: data });
 };
 
 const saveQuiz = async function (data) {
@@ -13,4 +13,12 @@ const saveQuiz = async function (data) {
     .catch((e) => console.log(e));
 };
 
-module.exports = { saveQuiz, fetchQuiz };
+const fetchLink = async (data) => {
+  const quiz = await fetchQuiz(data);
+  const link = quiz.links.pop();
+  await quiz.save();
+
+  return link;
+};
+
+module.exports = { saveQuiz, fetchQuiz, fetchLink };
